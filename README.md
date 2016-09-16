@@ -1,8 +1,8 @@
 # QSimpleRestServer
 
-A Qt REST Server.
+A very simple Qt REST Server.
 
-It uses QHttpServer [Amir Zamani](https://github.com/azadkuh) for HTTP.
+It uses QHttpServer from [Nikhil Marathe](https://github.com/nikhilm/qhttpserver) for the HTTP-Server.
 
 QHttpServer uses Joyent's [HTTP Parser](http://github.com/joyent/http-parser) and is asynchronous and does not require any inheritance.
 
