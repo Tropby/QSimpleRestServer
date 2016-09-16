@@ -58,10 +58,46 @@ The Method "http_get_" will be called for the REST - Resource "/".
 
 ## Method naming
 
-Every REST - Method has to start with "http_" followed by the HTTP-Method ("get", "post", "put", "delete", ...). After that the resource path is added (replace all "/" with"_").
+Every REST - Method has to start with *http_* followed by the HTTP-Method ( *get*, *post*, *put*, *delete*, ... ). After that the resource path is added ( replace all "/" with "_" ).
 
 ### Example
 HTTP-Method: GET
 REST-Rescouce: /customer/event 
 
-Methodname must be: * http_get_customer_event * 
+Methodname must be: http_get_customer_event
+
+### Special namings
+
+You can use the keyword "STAR" als a wildcard in your method names.
+
+A litte example:
+
+```c++
+  void http_get_customerSTAR(RESTRequest * request);
+```
+
+This method will be handled as Method "GET" for resource *customer* and all sub resources like */customer/events* or */customer/bill*.
+
+To get the "path" just call
+
+```c++
+    request->path()
+```
+
+## Working with parameters
+
+All parameters within the URL will be parsed to *request->params()*. There you get an *QMap<QString, QString>* with all query parameters.
+
+```c++
+    if( request->params().contains( "echo" ) )
+    {
+	request->result()->setData( request->params()["echo"] );
+	request->result()->setStatusCode( 200 );
+    }
+    else
+    {
+	request->result()->setData( "echo not set!" );
+	request->result()->setStatusCode( 500 );
+    }
+```
+
