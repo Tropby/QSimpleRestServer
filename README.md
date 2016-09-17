@@ -14,55 +14,61 @@ Requires Qt 5 (maybe Qt 4 works too, not testet jet)
 
 ## Usage
 
-Include the headers
+Include the pri-File into your pro-File
 
 ```c++
-    #include "restserver.h"
-    #include "restrequestlistener.h"
-    #include "restrequest.h"
+include(REST.pri)
+```
+
+After that you can use the follwing headers to implement your REST-Server.
+
+```c++
+#include "restserver.h"
+#include "restrequestlistener.h"
+#include "restrequest.h"
 ```
 
 Create a Server and setup some REST - Listener
 
 ```c++
-    RESTServer server;
-    server.addRequestListener( new HelloWorldListener() );
-    server.listen( 8081 );
+RESTServer server;
+server.addRequestListener( new HelloWorldListener() );
+server.listen( 8081 );
 ```
 
 The REST - Listener must extent RESTRequestListener. The Qt-Slot System is used to find the right Method.
 
 ```c++
-    class HelloWorldListener : public RESTRequestListener
-    {
-	Q_OBJECT
-    public:
-	explicit HelloWorldListener(QObject *parent = 0);
+class HelloWorldListener : public RESTRequestListener
+{
+  Q_OBJECT
+  public:
+    explicit HelloWorldListener(QObject * parent = 0);
 
-    signals:
+  signals:
 
-    public slots:
-	void http_get_( RESTRequest * request );
-    };
+  public slots:
+    void http_get_( RESTRequest * request );
+};
 ```
 
 ```c++
-    void HelloWorldListener::http_get_(RESTRequest *request)
-    {
-	request->result()->setData( "Hello World" );
-	request->result()->setStatusCode( 200 );
-    }
+void HelloWorldListener::http_get_(RESTRequest * request)
+{
+  request->result()->setData( "Hello World" );
+  request->result()->setStatusCode( 200 );
+}
 ```
 
 The Method "http_get_" will be called for the REST - Resource "/".
 
 ## Method naming
 
-Every REST - Method has to start with *http_* followed by the HTTP-Method ( *get*, *post*, *put*, *delete*, ... ). After that the resource path is added ( replace all "/" with "_" ).
+Every REST - Method has to start with *http_* followed by the HTTP-Method ( *get*, *post*, *put*, *delete*, ... ). After that the resource path is added ( replace all "/" with "\_" ).
 
 ### Example
 HTTP-Method: GET
-REST-Rescouce: /customer/event 
+REST-Rescouce: /customer/event
 
 Methodname must be: http_get_customer_event
 
@@ -86,18 +92,17 @@ To get the "path" just call
 
 ## Working with parameters
 
-All parameters within the URL will be parsed to *request->params()*. There you get an *QMap<QString, QString>* with all query parameters.
+All parameters within the URL will be parsed to `request->params()`. There you get an `QMap<QString, QString>` with all query parameters.
 
 ```c++
-    if( request->params().contains( "echo" ) )
-    {
-	request->result()->setData( request->params()["echo"] );
-	request->result()->setStatusCode( 200 );
-    }
-    else
-    {
-	request->result()->setData( "echo not set!" );
-	request->result()->setStatusCode( 500 );
-    }
+if( request->params().contains( "echo" ) )
+{
+  request->result()->setData( request->params()["echo"] );
+  request->result()->setStatusCode( 200 );
+}
+else
+{
+  request->result()->setData( "echo not set!" );
+  request->result()->setStatusCode( 500 );
+}
 ```
-
