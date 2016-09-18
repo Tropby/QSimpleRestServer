@@ -20,6 +20,7 @@ public:
     QString path();
     QByteArray postData();
     RESTResult * result(){ return &m_Result; }
+    QString host();
 
 signals:
 

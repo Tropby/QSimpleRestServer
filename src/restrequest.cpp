@@ -42,6 +42,11 @@ QByteArray RESTRequest::postData()
     return m_Request->body();
 }
 
+QString RESTRequest::host()
+{
+    return m_Request->remoteAddress();
+}
+
 void RESTRequest::finished()
 {
     const QMetaObject * meta = m_Listener->metaObject();
@@ -56,7 +61,7 @@ void RESTRequest::finished()
         {
             QString name = metamethod.name();
             QString p = m_Request->path();
-            QString path = m_Request->methodString().toLower() + p.replace( "/", "_" ).toLower();
+            QString path = m_Request->methodString().toLower() + p.replace( "/", "_" ).replace(".", "_").toLower();
 
             QRegExp exp( name.replace( "STAR", "*" ) );
             exp.setPatternSyntax( QRegExp::Wildcard );
