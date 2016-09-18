@@ -27,7 +27,7 @@ QMap<QString, QString> RESTRequest::params()
     QList<QPair<QString, QString> > q = QUrlQuery( m_Request->url() ).queryItems();
     for( int i = 0; i < q.count(); i++ )
     {
-        params[ q[i].first ] = q[i].second;
+        params[ QUrl::fromPercentEncoding( q[i].first.toLatin1() ) ] = QUrl::fromPercentEncoding( q[i].second.toLatin1() );
     }
     return params;
 }
